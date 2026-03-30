@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAI Flood Intelligence Agent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.85);
+            /* dark cool gray */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .alert-banner {
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        body {
+            background-color: #0f172a;
+            /* slate 900 */
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #f8fafc;
+        }
+
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+
+<body class="font-sans min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <header
+            class="glass-panel p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center border-t-4 border-red-600">
+            <div class="mb-4 md:mb-0">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <h1 class="text-3xl font-bold text-white tracking-wide">RAI Flood Disaster Command Center</h1>
+                </div>
+                <p class="text-gray-400 mt-2 text-sm uppercase tracking-widest font-semibold flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    Command Center Active
+                </p>
+            </div>
+            <button onclick="runSimulation()" id="runBtn"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.5)] transition transform hover:-translate-y-1 w-full md:w-auto">
+                Run Disaster Simulation
+            </button>
+        </header>
+
+        <!-- Alert Notification Banner Container -->
+        <div id="alertContainer" class="flex flex-col gap-3 transition-all duration-300">
+            <!-- Will be populated by JS -->
+        </div>
+
+        <!-- Main Content Grid -->
+        <div id="dashboardContent"
+            class="grid grid-cols-1 lg:grid-cols-12 gap-6 opacity-50 transition-opacity duration-500 pointer-events-none">
+
+            <!-- Left Column (Maps & Charts) -->
+            <div class="lg:col-span-8 flex flex-col gap-6">
+
+                <!-- Live Animated Flood Map -->
+                <div class="glass-panel p-6 rounded-2xl relative h-[600px] flex flex-col">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        Live Operations Command Map
+                        <span class="ml-auto flex items-center gap-2 text-[10px] text-gray-400 font-normal">
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> LIVE SIMULATION ACTIVE
+                        </span>
+                    </h2>
+                    <div class="flex-grow relative bg-gray-900 rounded-xl overflow-hidden border border-gray-800">
+                        <canvas id="mapCanvas" class="absolute inset-0 w-full h-full"></canvas>
+
+                        <!-- Mini Legend Overlay -->
+                        <div
+                            class="absolute bottom-4 left-4 glass-panel p-3 rounded-lg text-[10px] space-y-2 z-10 border-gray-700">
+                            <div class="flex items-center gap-2 text-gray-300"><span
+                                    class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                                Flood Zone</div>
+                            <div class="flex items-center gap-2 text-gray-300"><span
+                                    class="w-2 h-2 bg-emerald-500 rounded-sm"></span> Rescue Base</div>
+                            <div class="flex items-center gap-2 text-gray-300"><span
+                                    class="w-2 h-2 bg-orange-500 rounded-sm"></span> Shelter</div>
+                            <div class="flex items-center gap-2 text-gray-300"><span
+                                    class="w-2 h-2 bg-purple-500 rounded-full"></span> Moving Unit</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evacuation Flow & Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h2
+                            class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                            <svg class="w-5 h-5 mr-2 text-orange-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                            Evacuation Flow Simulation
+                        </h2>
+                        <div id="evacuationStats" class="space-y-4">
+                            <div class="text-gray-500 text-sm italic">Monitoring population movement...</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h2
+                            class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                            <svg class="w-5 h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                </path>
+                            </svg>
+                            Rescue Unit Dispatch Status
+                        </h2>
+                        <div id="rescueUnitStatus" class="space-y-3 max-h-[200px] overflow-y-auto pr-2">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ethical Resource Allocation -->
+                <div class="glass-panel p-6 rounded-2xl w-full overflow-x-auto">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                        Ethical Resource Deployment
+                    </h2>
+                    <table class="min-w-full text-left text-sm" id="allocationTable">
+                        <thead class="bg-gray-800 text-gray-300 uppercase text-xs tracking-wider">
+                            <tr>
+                                <th class="p-3 rounded-tl-lg">District</th>
+                                <th class="p-3">Rescue Boats</th>
+                                <th class="p-3">Helicopters</th>
+                                <th class="p-3">Medical Teams</th>
+                                <th class="p-3">Evac Vehicles</th>
+                                <th class="p-3 rounded-tr-lg">Food Rations</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700" id="allocationBody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- AI Decision Logs -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Agent Decision Explanations
+                    </h2>
+                    <div id="logsContainer"
+                        class="bg-gray-900 border border-gray-700 text-gray-300 p-4 rounded-xl font-mono text-xs h-64 overflow-y-auto space-y-2">
+                        <div class="text-gray-500">> Awaiting scenario initialization...</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column (Vulnerability, Dam, Logistics) -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+
+                <!-- Dam Management -->
+                <div
+                    class="glass-panel p-6 rounded-2xl flex flex-col border-t-4 border-blue-500 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-blue-900/10 z-0"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-xl font-bold mb-1 flex items-center text-gray-200">
+                            <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
+                            </svg>
+                            Dam Water Monitor
+                        </h2>
+                        <p class="text-gray-400 text-xs mb-4 uppercase tracking-wider font-semibold">Idukki Reservoir
+                            Control</p>
+
+                        <div id="damContainer"
+                            class="bg-gray-800 border border-gray-700 p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vulnerability Map -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                        Population Vulnerability
+                    </h2>
+                    <div id="vulnerabilityContainer" class="space-y-4"></div>
+                </div>
+
+                <!-- Logistics Routes -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col h-[280px]">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Supply Chain Routing
+                    </h2>
+                    <div id="logisticsContainer" class="space-y-3 overflow-y-auto pr-2"></div>
+                </div>
+
+                <!-- Drone Deployment -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col h-[280px]">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        Autonomous Drone Units
+                    </h2>
+                    <div id="droneContainer" class="space-y-3 overflow-y-auto pr-2">
+                        <div class="text-gray-500 text-sm italic">Ground stations ready...</div>
+                    </div>
+                </div>
+
+                <!-- Post-Disaster Reports -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col h-[300px]">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-gray-200 border-b border-gray-700 pb-2">
+                        <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        Damage Assessment
+                    </h2>
+                    <div id="damageReportContainer" class="space-y-4 overflow-y-auto pr-2">
+                        <div class="text-gray-500 text-sm italic">Synthesizing ground data...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+                            let animationFrame;
+                            let mapData = {
+                                regions: [],
+                            movingUnits: [],
+                            dronePaths: [],
+                            evacuations: []
+        };
+
+                            const canvas = document.getElementById('mapCanvas');
+                            const ctx = canvas.getContext('2d');
+
+                            function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+                            canvas.width = rect.width;
+                            canvas.height = rect.height;
+        }
+                            window.addEventListener('resize', resizeCanvas);
+                            resizeCanvas();
+
+                            function drawMap() {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            const w = canvas.width;
+                            const h = canvas.height;
+
+            // 1. Draw Districts and Flood Zones
+            mapData.regions.forEach(r => {
+                const x = (r.x / 100) * w;
+                            const y = (r.y / 100) * h;
+                
+                if (r.severity_index > 0.3) {
+                    const radius = (r.severity_index * 80) + (Math.sin(Date.now() / 500) * 5);
+                            const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                            let color = 'rgba(59, 130, 246,';
+                    if (r.severity_index > 0.8) color = 'rgba(30, 58, 138,';
+                    else if (r.severity_index > 0.6) color = 'rgba(37, 99, 235,';
+
+                            gradient.addColorStop(0, `${color} 0.6)`);
+                            gradient.addColorStop(0.5, `${color} 0.2)`);
+                            gradient.addColorStop(1, `${color} 0)`);
+
+                            ctx.fillStyle = gradient;
+                            ctx.beginPath();
+                            ctx.arc(x, y, radius, 0, Math.PI * 2);
+                            ctx.fill();
+                }
+
+                            let nodeColor = '#3b82f6';
+                            if (r.is_base) nodeColor = '#10b981';
+                            if (r.has_shelter) nodeColor = '#f59e0b';
+
+                            ctx.fillStyle = nodeColor;
+                            ctx.shadowBlur = 15;
+                            ctx.shadowColor = nodeColor;
+                            ctx.beginPath();
+                            ctx.arc(x, y, 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.shadowBlur = 0;
+
+                            ctx.fillStyle = "#fff";
+                            ctx.font = "bold 10px Inter, sans-serif";
+                            ctx.textAlign = "center";
+                            ctx.fillText(r.name, x, y - 15);
+            });
+
+            // 2. Drone Paths
+            mapData.dronePaths.forEach(p => {
+                                ctx.strokeStyle = "rgba(34, 211, 238, 0.4)";
+                            ctx.setLineDash([5, 5]);
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                p.path.forEach((pt, i) => {
+                    const px = (pt.x / 100) * w;
+                            const py = (pt.y / 100) * h;
+                            if (i === 0) ctx.moveTo(px, py);
+                            else ctx.lineTo(px, py);
+                });
+                            ctx.stroke();
+                            ctx.setLineDash([]);
+
+                            const progress = (Date.now() % 5000) / 5000;
+                            const start = p.path[0];
+                            const end = p.path[1];
+                            const dx = ((start.x + (end.x - start.x) * progress) / 100) * w;
+                            const dy = ((start.y + (end.y - start.y) * progress) / 100) * h;
+
+                            ctx.fillStyle = "rgba(34, 211, 238, 0.1)";
+                            ctx.beginPath();
+                            ctx.arc(dx, dy, 40, 0, Math.PI * 2);
+                            ctx.fill();
+
+                            ctx.fillStyle = "#22d3ee";
+                            ctx.beginPath();
+                            ctx.arc(dx, dy, 3, 0, Math.PI * 2);
+                            ctx.fill();
+            });
+
+            // 3. Moving Units
+            mapData.movingUnits.forEach(u => {
+                const progress = (Date.now() % 8000) / 8000;
+                            const ux = ((u.source.x + (u.destination.x - u.source.x) * progress) / 100) * w;
+                            const uy = ((u.source.y + (u.destination.y - u.source.y) * progress) / 100) * h;
+
+                            ctx.fillStyle = "#a855f7";
+                            ctx.shadowBlur = 10;
+                            ctx.shadowColor = "#a855f7";
+                            ctx.beginPath();
+                            ctx.arc(ux, uy, 4, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.shadowBlur = 0;
+
+                            ctx.fillStyle = "rgba(255,255,255,0.7)";
+                            ctx.font = "8px monospace";
+                            ctx.fillText(u.id, ux, uy + 12);
+            });
+
+            // 4. Evacuation Flow
+            mapData.evacuations.forEach(e => {
+                for (let i = 0; i < 5; i++) {
+                    const offset = (Date.now() + (i * 1000)) % 3000 / 3000;
+                            const px = ((e.source.x + (e.destination.x - e.source.x) * offset) / 100) * w + (Math.sin(i) * 10);
+                            const py = ((e.source.y + (e.destination.y - e.source.y) * offset) / 100) * h + (Math.cos(i) * 10);
+                            ctx.fillStyle = "rgba(245, 158, 11, 0.4)";
+                            ctx.beginPath();
+                            ctx.arc(px, py, 2, 0, Math.PI * 2);
+                            ctx.fill();
+                }
+            });
+
+                            animationFrame = requestAnimationFrame(drawMap);
+        }
+
+                            async function runSimulation() {
+            const btn = document.getElementById('runBtn');
+                            const dashboard = document.getElementById('dashboardContent');
+                            const logs = document.getElementById('logsContainer');
+                            const alertC = document.getElementById('alertContainer');
+
+                            btn.innerText = 'Synchronizing Agents...';
+                            btn.disabled = true;
+                            btn.classList.add('animate-pulse', 'cursor-wait');
+
+                            dashboard.classList.remove('opacity-100', 'pointer-events-auto');
+                            dashboard.classList.add('opacity-50', 'pointer-events-none');
+                            alertC.innerHTML = '';
+
+                            try {
+                const res = await fetch('http://127.0.0.1:8000/api/simulation');
+                            const data = await res.json();
+                            populateDashboard(data);
+                
+                mapData.regions = Object.entries(data.flood_map).map(([name, info]) => ({name, ...info }));
+                            mapData.dronePaths = data.drone_missions;
+                            mapData.movingUnits = data.moving_units;
+                            mapData.evacuations = data.evacuation_data;
+
+                            if (!animationFrame) drawMap();
+
+                            dashboard.classList.remove('opacity-50', 'pointer-events-none');
+                            dashboard.classList.add('opacity-100', 'pointer-events-auto');
+            } catch (err) {
+                                logs.innerHTML += `<div class="text-red-400">> [FATAL] Command Link Severed.</div>`;
+                            console.error(err);
+            } finally {
+                                btn.innerText = 'Run Disaster Simulation';
+                            btn.disabled = false;
+                            btn.classList.remove('animate-pulse', 'cursor-wait');
+            }
+        }
+
+                            function populateDashboard(data) {
+            const alertC = document.getElementById('alertContainer');
+            if (data.alerts && data.alerts.length > 0) {
+                                alertC.innerHTML = data.alerts.map(a => {
+                                    const isWarning = a.type === 'PRE-FLOOD WARNING';
+                                    const icon = isWarning ? '⚠' : '🚨';
+                                    const bgColor = isWarning ? 'from-amber-700 to-amber-600' : 'from-red-900 to-red-800';
+                                    const badge = isWarning ? 'bg-amber-600' : 'bg-red-600';
+                                    return `
+                    <div class="alert-banner bg-gradient-to-r ${bgColor} border-l-8 border-white/20 rounded-xl p-4 shadow-xl flex flex-col md:flex-row items-center gap-4 text-white">
+                        <div class="text-3xl">${icon}</div>
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-xl flex items-center gap-2">${a.type} <span class="text-[10px] ${badge} px-2 py-0.5 rounded-full uppercase tracking-tighter">${a.severity || 'Urgent'}</span></h3>
+                            <div class="text-sm text-white/80 mt-1"><strong>Location:</strong> ${a.district} | ${a.message}</div>
+                        </div>
+                    </div>`;
+                                }).join('');
+            }
+
+                            const logsDiv = document.getElementById('logsContainer');
+            logsDiv.innerHTML = data.agent_logs.map((log, i) => {
+                                let color = "text-green-400";
+                            if (log.type === "decision") color = "text-cyan-400 font-bold";
+                            return `<div class="${color} border-l-2 border-white/10 pl-3 mb-3 text-[11px] leading-relaxed">
+                                <span class="text-[9px] text-gray-500 block">NODE RECEPTOR ${i + 1}</span>
+                                ${log.message.replace(/\n/g, '<br>')}
+                            </div>`;
+            }).join('');
+            setTimeout(() => {logsDiv.scrollTop = logsDiv.scrollHeight; }, 500);
+
+                            const evapDiv = document.getElementById('evacuationStats');
+            evapDiv.innerHTML = data.evacuation_data.map(e => `
+                            <div class="bg-gray-800/40 p-4 rounded-xl border border-gray-700">
+                                <div class="flex justify-between items-end mb-2">
+                                    <div><span class="text-xs text-gray-500 uppercase block">Evacuation Zone</span><span class="font-bold text-white">${e.district}</span></div>
+                                    <div class="text-right"><span class="text-[10px] text-gray-500 block">TO SHELTER</span><span class="text-xs text-orange-400 font-bold">${e.target_shelter}</span></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] mb-1">
+                                    <span class="text-gray-400">Status: ${((e.evacuated / e.at_risk) * 100).toFixed(0)}% Clear</span>
+                                    <span class="text-white">${e.evacuated.toLocaleString()} / ${e.at_risk.toLocaleString()}</span>
+                                </div>
+                                <div class="w-full bg-gray-900 rounded-full h-2"><div class="bg-orange-500 h-full rounded-full shadow-[0_0_10px_rgba(245,158,11,0.5)]" style="width: ${ (e.evacuated/e.at_risk)*100 }%"></div></div>
+                            </div>`).join('');
+
+                            const rescueDiv = document.getElementById('rescueUnitStatus');
+            rescueDiv.innerHTML = data.moving_units.map(u => `
+                            <div class="flex items-center gap-3 bg-gray-900/50 p-2 rounded-lg border border-white/5">
+                                <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-xs">${u.id[0]}</div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between"><span class="text-xs font-bold text-gray-300">${u.id} (${u.type})</span><span class="text-[9px] text-purple-400 uppercase font-bold animate-pulse">${u.status}</span></div>
+                                    <div class="text-[10px] text-gray-500">${u.source.name} → ${u.destination.name}</div>
+                                </div>
+                            </div>`).join('');
+
+                            const tbody = document.getElementById('allocationBody');
+            tbody.innerHTML = Object.entries(data.allocation_plan).map(([region, res]) => `
+                            <tr class="hover:bg-white/5 border-b border-white/5 transition">
+                                <td class="p-3 text-xs font-bold text-white">${region}</td>
+                                <td class="p-3 text-center text-xs text-cyan-400 font-mono">${res.rescue_boats || 0}</td>
+                                <td class="p-3 text-center text-xs text-cyan-400 font-mono">${res.helicopters || 0}</td>
+                                <td class="p-3 text-center text-xs text-cyan-400 font-mono">${res.medical_teams || 0}</td>
+                                <td class="p-3 text-center text-xs text-orange-400 font-mono">${res.food_supplies || 0}</td>
+                            </tr>`).join('');
+
+                            const dContainer = document.getElementById('damContainer');
+                            const dam = data.dam_decision;
+                            dContainer.innerHTML = `
+                            <div class="text-4xl font-bold ${dam.decision.includes('Emergency') ? 'text-red-500' : 'text-cyan-400'}">${dam.suggested_release_volume.toFixed(1)}<span class="text-sm ml-1 opacity-50 font-normal">m³/s</span></div>
+                            <div class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mt-3">${dam.decision}</div>
+                            <div class="text-[10px] text-gray-400 mt-2 bg-black/40 p-2 rounded leading-normal border border-white/5">${dam.reasoning}</div>
+                            `;
+
+                            const vContainer = document.getElementById('vulnerabilityContainer');
+            vContainer.innerHTML = Object.entries(data.vulnerability_map).sort((a,b)=>b[1]-a[1]).map(([name, val]) => `
+                            <div class="mb-3">
+                                <div class="flex justify-between text-[10px] mb-1"><span class="text-gray-400">${name}</span><span class="text-white font-bold">${(val * 100).toFixed(0)}%</span></div>
+                                <div class="w-full bg-gray-900 h-1 rounded-full overflow-hidden"><div class="bg-cyan-500 h-full" style="width: ${val*100}%"></div></div>
+                            </div>`).join('');
+        }
+    </script>
+</body>
+
+</html>

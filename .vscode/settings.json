@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "RAI-Flood-Agent"
+    ],
+    "python.autoComplete.extraPaths": [
+        "RAI-Flood-Agent"
+    ],
+    "python.defaultInterpreterPath": "C:/Users/ashwi/AppData/Local/Python/bin/python.exe"
+}

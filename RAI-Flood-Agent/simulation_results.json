@@ -1,0 +1,781 @@
+{
+  "alerts": [
+    {
+      "type": "FLOOD ALERT",
+      "district": "Kottayam",
+      "severity": "Critical Risk",
+      "risk_level": 0.81,
+      "message": "Immediate evacuation recommended."
+    },
+    {
+      "type": "DAM OVERFLOW WARNING",
+      "dam": "Idukki Dam",
+      "capacity": "99%",
+      "forecast": "Moderate",
+      "message": "Controlled water release required immediately to prevent structural failure."
+    },
+    {
+      "type": "PRE-FLOOD WARNING",
+      "district": "Kottayam",
+      "severity": "Urgent",
+      "message": "Heavy rainfall predicted. Activate preventive protocols."
+    }
+  ],
+  "flood_map": {
+    "Kochi Base": {
+      "x": 15,
+      "y": 15,
+      "has_dam": false,
+      "is_base": true,
+      "has_shelter": false,
+      "severity_index": 0.513,
+      "classification": "Moderate Risk",
+      "flood_alert": "Yellow Alert",
+      "flood_possibility_level": "51%",
+      "alerts": []
+    },
+    "Ernakulam": {
+      "x": 30,
+      "y": 60,
+      "has_dam": false,
+      "is_base": false,
+      "has_shelter": true,
+      "severity_index": 0.543,
+      "classification": "Moderate Risk",
+      "flood_alert": "Yellow Alert",
+      "flood_possibility_level": "54%",
+      "alerts": []
+    },
+    "Idukki": {
+      "x": 60,
+      "y": 40,
+      "has_dam": true,
+      "is_base": false,
+      "has_shelter": false,
+      "severity_index": 0.496,
+      "classification": "Moderate Risk",
+      "flood_alert": "Yellow Alert",
+      "flood_possibility_level": "49%",
+      "alerts": []
+    },
+    "Thiruvananthapuram": {
+      "x": 45,
+      "y": 85,
+      "has_dam": false,
+      "is_base": false,
+      "has_shelter": true,
+      "severity_index": 0.585,
+      "classification": "Moderate Risk",
+      "flood_alert": "Yellow Alert",
+      "flood_possibility_level": "58%",
+      "alerts": []
+    },
+    "Kottayam": {
+      "x": 50,
+      "y": 55,
+      "has_dam": false,
+      "is_base": false,
+      "has_shelter": true,
+      "severity_index": 0.812,
+      "classification": "Critical Risk",
+      "flood_alert": "Red Alert",
+      "flood_possibility_level": "81%",
+      "alerts": [
+        {
+          "type": "FLOOD ALERT",
+          "district": "Kottayam",
+          "severity": "Critical Risk",
+          "risk_level": 0.81,
+          "message": "Immediate evacuation recommended."
+        }
+      ]
+    }
+  },
+  "dam_decision": {
+    "suggested_release_volume": 63.35,
+    "decision": "Emergency Spillway Release",
+    "strategy_applied": "Monsoon",
+    "reasoning": "Standard Monsoon protocol followed.",
+    "alert": {
+      "type": "DAM OVERFLOW WARNING",
+      "dam": "Idukki Dam",
+      "capacity": "99%",
+      "forecast": "Moderate",
+      "message": "Controlled water release required immediately to prevent structural failure."
+    }
+  },
+  "vulnerability_map": {
+    "Kochi Base": 0.666,
+    "Ernakulam": 0.726,
+    "Idukki": 0.66,
+    "Thiruvananthapuram": 0.711,
+    "Kottayam": 0.769
+  },
+  "allocation_plan": {
+    "Kochi Base": {
+      "rescue_boats": 15,
+      "helicopters": 2,
+      "medical_teams": 5,
+      "food_supplies": 2888,
+      "evacuation_vehicles": 12
+    },
+    "Ernakulam": {
+      "rescue_boats": 16,
+      "helicopters": 2,
+      "medical_teams": 14,
+      "food_supplies": 3149,
+      "evacuation_vehicles": 13
+    },
+    "Idukki": {
+      "rescue_boats": 15,
+      "helicopters": 2,
+      "medical_teams": 14,
+      "food_supplies": 2862,
+      "evacuation_vehicles": 12
+    },
+    "Thiruvananthapuram": {
+      "rescue_boats": 16,
+      "helicopters": 2,
+      "medical_teams": 5,
+      "food_supplies": 3084,
+      "evacuation_vehicles": 13
+    },
+    "Kottayam": {
+      "rescue_boats": 17,
+      "helicopters": 2,
+      "medical_teams": 6,
+      "food_supplies": 3335,
+      "evacuation_vehicles": 14
+    }
+  },
+  "logistics_plan": {
+    "Kochi Base": {
+      "route": [
+        "Kochi Base"
+      ],
+      "total_distance": 0
+    },
+    "Ernakulam": {
+      "route": [
+        "Kochi Base",
+        "Ernakulam"
+      ],
+      "total_distance": 15
+    },
+    "Idukki": {
+      "route": [
+        "Kochi Base",
+        "Ernakulam",
+        "Idukki"
+      ],
+      "total_distance": 125
+    },
+    "Thiruvananthapuram": {
+      "route": [
+        "Kochi Base",
+        "Kottayam",
+        "Thiruvananthapuram"
+      ],
+      "total_distance": 210
+    },
+    "Kottayam": {
+      "route": [
+        "Kochi Base",
+        "Kottayam"
+      ],
+      "total_distance": 60
+    }
+  },
+  "drone_missions": [
+    {
+      "unit_id": "D-39",
+      "district": "Kochi Base",
+      "mission": "Aerial flood mapping, Victim detection, Thermal scanning",
+      "status": "Deployed",
+      "path": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 15,
+          "y": 15
+        }
+      ]
+    },
+    {
+      "unit_id": "D-93",
+      "district": "Ernakulam",
+      "mission": "Aerial flood mapping, Victim detection, Thermal scanning",
+      "status": "Deployed",
+      "path": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 30,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "unit_id": "D-63",
+      "district": "Idukki",
+      "mission": "Aerial flood mapping, Victim detection, Thermal scanning",
+      "status": "Deployed",
+      "path": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 60,
+          "y": 40
+        }
+      ]
+    },
+    {
+      "unit_id": "D-89",
+      "district": "Thiruvananthapuram",
+      "mission": "Aerial flood mapping, Victim detection, Thermal scanning",
+      "status": "Deployed",
+      "path": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 45,
+          "y": 85
+        }
+      ]
+    },
+    {
+      "unit_id": "D-56",
+      "district": "Kottayam",
+      "mission": "Aerial flood mapping, Victim detection, Thermal scanning",
+      "status": "Deployed",
+      "path": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 50,
+          "y": 55
+        }
+      ]
+    }
+  ],
+  "damage_reports": [
+    {
+      "district": "Kochi Base",
+      "displaced": "14,776",
+      "infra_damage": "Moderate",
+      "medical_demand": "Medium"
+    },
+    {
+      "district": "Ernakulam",
+      "displaced": "8,486",
+      "infra_damage": "Moderate",
+      "medical_demand": "Medium"
+    },
+    {
+      "district": "Thiruvananthapuram",
+      "displaced": "26,789",
+      "infra_damage": "Moderate",
+      "medical_demand": "Medium"
+    },
+    {
+      "district": "Kottayam",
+      "displaced": "13,914",
+      "infra_damage": "Severe",
+      "medical_demand": "High"
+    }
+  ],
+  "moving_units": [
+    {
+      "type": "Rescue Boat",
+      "id": "R-39",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Helicopter",
+      "id": "H-30",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Ambulance",
+      "id": "M-50",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Vehicle",
+      "id": "F-48",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Evacuation Bus",
+      "id": "E-59",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Rescue Boat",
+      "id": "R-63",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 30,
+        "y": 60,
+        "name": "Ernakulam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Helicopter",
+      "id": "H-28",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 30,
+        "y": 60,
+        "name": "Ernakulam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Ambulance",
+      "id": "M-14",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 30,
+        "y": 60,
+        "name": "Ernakulam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Vehicle",
+      "id": "F-97",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 30,
+        "y": 60,
+        "name": "Ernakulam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Evacuation Bus",
+      "id": "E-18",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 30,
+        "y": 60,
+        "name": "Ernakulam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Rescue Boat",
+      "id": "R-46",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 60,
+        "y": 40,
+        "name": "Idukki"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Helicopter",
+      "id": "H-38",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 60,
+        "y": 40,
+        "name": "Idukki"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Ambulance",
+      "id": "M-16",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 60,
+        "y": 40,
+        "name": "Idukki"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Vehicle",
+      "id": "F-38",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 60,
+        "y": 40,
+        "name": "Idukki"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Evacuation Bus",
+      "id": "E-99",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 60,
+        "y": 40,
+        "name": "Idukki"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Rescue Boat",
+      "id": "R-57",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 45,
+        "y": 85,
+        "name": "Thiruvananthapuram"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Helicopter",
+      "id": "H-33",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 45,
+        "y": 85,
+        "name": "Thiruvananthapuram"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Ambulance",
+      "id": "M-10",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 45,
+        "y": 85,
+        "name": "Thiruvananthapuram"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Vehicle",
+      "id": "F-96",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 45,
+        "y": 85,
+        "name": "Thiruvananthapuram"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Evacuation Bus",
+      "id": "E-78",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 45,
+        "y": 85,
+        "name": "Thiruvananthapuram"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Rescue Boat",
+      "id": "R-14",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 50,
+        "y": 55,
+        "name": "Kottayam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Helicopter",
+      "id": "H-26",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 50,
+        "y": 55,
+        "name": "Kottayam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Ambulance",
+      "id": "M-54",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 50,
+        "y": 55,
+        "name": "Kottayam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Vehicle",
+      "id": "F-50",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 50,
+        "y": 55,
+        "name": "Kottayam"
+      },
+      "status": "In Transit"
+    },
+    {
+      "type": "Evacuation Bus",
+      "id": "E-47",
+      "source": {
+        "x": 15,
+        "y": 15,
+        "name": "Kochi Base"
+      },
+      "destination": {
+        "x": 50,
+        "y": 55,
+        "name": "Kottayam"
+      },
+      "status": "In Transit"
+    }
+  ],
+  "evacuation_data": [
+    {
+      "district": "Kottayam",
+      "target_shelter": "Kottayam",
+      "at_risk": 15380,
+      "evacuated": 10766,
+      "remaining": 4614,
+      "source": {
+        "x": 50,
+        "y": 55
+      },
+      "destination": {
+        "x": 50,
+        "y": 55
+      }
+    }
+  ],
+  "agent_logs": [
+    {
+      "message": "Initializing RAI Flood Disaster Command Center multi-agent sequence.",
+      "type": "info"
+    },
+    {
+      "message": "[Warning Agent] PRE-FLOOD WARNING\nDistrict: Kottayam\nForecast Rainfall: Extreme\nFlood Probability: 120%\n\nRecommended Actions: Lower dam levels, Activate shelters.",
+      "type": "decision"
+    },
+    {
+      "message": "[Flood Agent] Environmental data quantified. District-level severity assigned.",
+      "type": "decision"
+    },
+    {
+      "message": "[Vulnerability Agent] Computed holistic district vulnerability utilizing demographic matrices.",
+      "type": "decision"
+    },
+    {
+      "message": "[Dam Agent] Standard Monsoon protocol followed.",
+      "type": "decision"
+    },
+    {
+      "message": "[Drone Agent] Drone Unit D-39 deployed to Kochi Base district.\n\nMission:\nAerial flood mapping, Victim detection, Thermal scanning\n\nCoverage Radius: 15 km",
+      "type": "decision"
+    },
+    {
+      "message": "[Drone Agent] Drone Unit D-93 deployed to Ernakulam district.\n\nMission:\nAerial flood mapping, Victim detection, Thermal scanning\n\nCoverage Radius: 15 km",
+      "type": "decision"
+    },
+    {
+      "message": "[Drone Agent] Drone Unit D-63 deployed to Idukki district.\n\nMission:\nAerial flood mapping, Victim detection, Thermal scanning\n\nCoverage Radius: 15 km",
+      "type": "decision"
+    },
+    {
+      "message": "[Drone Agent] Drone Unit D-89 deployed to Thiruvananthapuram district.\n\nMission:\nAerial flood mapping, Victim detection, Thermal scanning\n\nCoverage Radius: 15 km",
+      "type": "decision"
+    },
+    {
+      "message": "[Drone Agent] Drone Unit D-56 deployed to Kottayam district.\n\nMission:\nAerial flood mapping, Victim detection, Thermal scanning\n\nCoverage Radius: 15 km",
+      "type": "decision"
+    },
+    {
+      "message": "[Rescue Coordination Agent] Region: Kochi Base\nPriority: HIGH\nAction: Dispatched 15 boats, 2 helis.",
+      "type": "decision"
+    },
+    {
+      "message": "[Rescue Coordination Agent] Region: Ernakulam\nPriority: HIGH\nAction: Dispatched 16 boats, 2 helis.",
+      "type": "decision"
+    },
+    {
+      "message": "[Rescue Coordination Agent] Region: Idukki\nPriority: HIGH\nAction: Dispatched 15 boats, 2 helis.",
+      "type": "decision"
+    },
+    {
+      "message": "[Rescue Coordination Agent] Region: Thiruvananthapuram\nPriority: HIGH\nAction: Dispatched 16 boats, 2 helis.",
+      "type": "decision"
+    },
+    {
+      "message": "[Rescue Coordination Agent] Region: Kottayam\nPriority: CRITICAL\nAction: Dispatched 17 boats, 2 helis.",
+      "type": "decision"
+    },
+    {
+      "message": "[Evacuation Agent] EVACUATION IN PROGRESS\nDistrict: Kottayam -> Shelter: Kottayam\nEvacuated: 10,766 | Remaining: 4,614",
+      "type": "decision"
+    },
+    {
+      "message": "[Supply Chain Agent] Optimized disaster relief delivery pathways generated.",
+      "type": "decision"
+    },
+    {
+      "message": "[Assessment Agent] POST-DISASTER DAMAGE REPORT\nDistrict: Kochi Base\nDisplaced: 14,776\nInfra: Moderate",
+      "type": "decision"
+    },
+    {
+      "message": "[Assessment Agent] POST-DISASTER DAMAGE REPORT\nDistrict: Ernakulam\nDisplaced: 8,486\nInfra: Moderate",
+      "type": "decision"
+    },
+    {
+      "message": "[Assessment Agent] POST-DISASTER DAMAGE REPORT\nDistrict: Thiruvananthapuram\nDisplaced: 26,789\nInfra: Moderate",
+      "type": "decision"
+    },
+    {
+      "message": "[Assessment Agent] POST-DISASTER DAMAGE REPORT\nDistrict: Kottayam\nDisplaced: 13,914\nInfra: Severe",
+      "type": "decision"
+    },
+    {
+      "message": "All cooperating agents have resolved. Output ready for dashboard.",
+      "type": "info"
+    }
+  ]
+}
